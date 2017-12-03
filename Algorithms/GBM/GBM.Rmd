@@ -10,9 +10,9 @@ output: html_document
 ### Libraries used in this algorithm:
 
 ```{r}
-#install(gbm)
+#nstall.packages("gbm")
 library(gbm)
-#install(caret)
+#nstall.packages("caret")
 library(caret)
 ```
 
