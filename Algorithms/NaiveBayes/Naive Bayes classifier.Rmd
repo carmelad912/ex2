@@ -1,12 +1,12 @@
 ---
 title: "NaiveBayes"
 author: "Dar Nettler & Carmela Davidovsky"
-date: "27 áðåáîáø 2017"
+date: "27 Ã¡Ã°Ã¥Ã¡Ã®Ã¡Ã¸ 2017"
 output: html_document
 ---
-#Classification Using Naive bayes
+# Classification Using Naive bayes
 
-###Libraries used in this algorithm:
+### Libraries used in this algorithm:
 ```{r}
 #install.packages("tidyr")
 library(tidyr)
@@ -16,28 +16,27 @@ library(ggplot2)
 library(e1071)
 ```
 
-###Read dataframe:
+### Read dataframe:
 
 ```{r}
 df<-read.csv("train.csv",na.strings = "")
 ```
 
 
-###Turn Survived and Pclass into factor:
+### Turn Survived and Pclass into factor:
 
 ```{r}
 df$Survived<- as.factor(df$Survived)
 df$Pclass<- as.factor(df$Pclass)
 ```
 
-
-###Delete the passengerId, Ticket and name columns from the data frame and fill missing values of age with mean:
+### Delete the passengerId, Ticket and name columns from the data frame and fill missing values of age with mean:
 
 ```{r}
 df <- subset(df,select = -c(PassengerId,Ticket,Name))
 ```
 
-###Visualization of the behavior of each feature vs. the target feature (surviving or not).
+### Visualization of the behavior of each feature vs. the target feature (surviving or not).
 
 It is easier to explore factors and numeric features separately. Here we divide the features' names to numerics and factors:
 
@@ -55,13 +54,11 @@ df_tidy_numerics<-gather(cbind(Survived=df[,1],df[,numerics]),"feature","value",
 
 ```
 
-
 The first plot describes only categorical features (factors):
 
 ```{r}
 qplot(x=value,data=df_tidy_factors,fill=Survived) + facet_grid(~feature,scales="free")
 ```
-
 
 One more plot for numeric features:
 
@@ -69,7 +66,7 @@ One more plot for numeric features:
 qplot(x=value,data=df_tidy_numerics,fill=Survived) + facet_grid(~feature,scales="free")
 ```
 
-###Seperate the dataframe into train and test:
+### Seperate the dataframe into train and test:
 
 ```{r}
 set.seed(123)
@@ -78,7 +75,7 @@ train<- df[indices,]
 test<- df[-indices,]
 ```
 
-###Train a naive bayes model:
+### Train a naive bayes model:
 
 ```{r}
 nb_model <- naiveBayes(Survived~.,data = train)
@@ -91,36 +88,35 @@ The accuracy of the model:
 mean(pred==test$Survived)
 ```
 
-###Load the test dataframe: 
+### Load the test dataframe: 
 
 ```{r}
 new_df <-read.csv('test.csv',na.strings = "")
 ```
 
-###Save the passengerIds:
+### Save the passengerIds:
 
 ```{r}
 ids<- new_df$PassengerId
 ```
 
-###Turn Survived to a factor and delete the same columns we deleted in the train set:
+### Turn Survived to a factor and delete the same columns we deleted in the train set:
 
 ```{r}
 new_df$Pclass<- as.factor(new_df$Pclass)
 new_df <- subset(new_df,select = -c(PassengerId,Ticket,Name))
 ```
 
-###Predict the rows in the test set with the naive bayes model:
+### Predict the rows in the test set with the naive bayes model:
 
 ```{r}
 new_pred<- predict(nb_model,new_df,na.action = na.pass)
 ```
 
-###Write the predictions into file:
+### Write the predictions into file:
 
 ```{r}
 res <- cbind(PassengerId=ids,Survived=as.character(new_pred))
 write.csv(res,file="NaiveBayes.csv",row.names = F)
 
 ```
-##We found out that the best accuracy is when we omit the missing values and divide the train set into 87% of train and 13% of test.
