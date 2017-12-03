@@ -1,12 +1,12 @@
 ---
 title: "Ensemble"
 author: "Dar Nettler & Carmela Davidovsky"
-date: "28 áðåáîáø 2017"
+date: "28 Ã¡Ã°Ã¥Ã¡Ã®Ã¡Ã¸ 2017"
 output: html_document
 ---
-#Classification Using Ensemble of rpart and GBM
+# Classification Using Ensemble of rpart and GBM
 
-###Libraries used in this algorithm:
+### Libraries used in this algorithm:
 ```{r}
 #install.packages("caretEnsemble")
 library(caretEnsemble)
@@ -15,20 +15,20 @@ library(caret)
 
 ```
 
-###Read dataframe:
+### Read dataframe:
 
 ```{r}
 df<-read.csv("train.csv",na.strings = "")
 ```
 
-###Turn Survived and Pclass into factor:
+### Turn Survived and Pclass into factor:
 
 ```{r}
 df$Survived<- as.factor(df$Survived)
 df$Pclass<- as.factor(df$Pclass)
 ```
 
-###Delete the passengerId, Ticket, Cabin and name columns from the data frame and fill missing values of age with mean, and missing values of embarked with 'S'.
+### Delete the passengerId, Ticket, Cabin and name columns from the data frame and fill missing values of age with mean, and missing values of embarked with 'S'.
 
 ```{r}
 df <- subset(df,select = -c(PassengerId,Ticket,Name,Cabin))
@@ -36,7 +36,7 @@ df[is.na(df[,"Age"]),"Age"]<-mean(df[,"Age"],na.rm = TRUE)
 df$Embarked[is.na(df$Embarked)]<-'S'
 ```
 
-###Defining the Ensemble's Members:
+### Defining the Ensemble's Members:
 We start by running several models together, with the *caretList* method. These models will be compared, and if they'll suit the job, we'll compose an ensemble out of theme.
 ```{r}
 set.seed(123)
@@ -65,7 +65,7 @@ models <- caretList(
 
 ```
 
-###check the results and check if there's a correlation between the models:
+### check the results and check if there's a correlation between the models:
 
 ```{r}
 results <- resamples(models)
@@ -74,7 +74,7 @@ splom(results)
 modelCor(results)
 ```
 
-###Stack using random forest:
+### Stack using random forest:
 
 ```{r}
 set.seed(123)
@@ -90,20 +90,20 @@ stack.rf <- caretStack(
 )
 ```
 
-###Load the test dataframe and add a empty column of the class (the model and the test set must be the same size): 
+### Load the test dataframe and add a empty column of the class (the model and the test set must be the same size): 
 
 ```{r}
 new_df <-read.csv('test.csv',na.strings = "")
 new_df$Survived<-NA
 ```
 
-###Save the passengerIds:
+### Save the passengerIds:
 
 ```{r}
 ids<- new_df$PassengerId
 ```
 
-###Turn Survived to a factor and delete the same columns we deleted in the train set. fill missing values in age and fare with the mean of the column:
+### Turn Survived to a factor and delete the same columns we deleted in the train set. fill missing values in age and fare with the mean of the column:
 
 ```{r}
 new_df$Pclass<- as.factor(new_df$Pclass)
@@ -112,14 +112,14 @@ new_df[is.na(new_df[,"Age"]),"Age"]<-mean(new_df[,"Age"],na.rm = TRUE)
 new_df[is.na(new_df[,"Fare"]),"Fare"]<-mean(new_df[,"Fare"],na.rm = TRUE)
 ```
 
-###Predict the rows in the test set with the ensemble model and turn the levels into *0* and *1*:
+### Predict the rows in the test set with the ensemble model and turn the levels into *0* and *1*:
 
 ```{r}
 new_pred<-predict(stack.rf, newdata=new_df)
 levels(new_pred)<-c("0","1")
 ```
 
-###Write the predictions into file:
+### Write the predictions into file:
 
 ```{r}
 res <- cbind(PassengerId=ids,Survived=as.character(new_pred))
