@@ -10,7 +10,7 @@ output: html_document
 ```{r}
 #install.packages("caretEnsemble")
 library(caretEnsemble)
-#install("caret")
+#install.packages("caret")
 library(caret)
 
 ```
