@@ -1,13 +1,13 @@
 ---
 title: "GBM"
 author: "Dar Nettler & Carmela Davidovsky"
-date: "27 бребобш 2017"
+date: "27 ГЎГ°ГҐГЎГ®ГЎГё 2017"
 output: html_document
 ---
 
-#Classification Using GBM with caret
+# Classification Using GBM with caret
 
-###Libraries used in this algorithm:
+### Libraries used in this algorithm:
 
 ```{r}
 #install(gbm)
@@ -16,27 +16,27 @@ library(gbm)
 library(caret)
 ```
 
-###Read dataframe:
+### Read dataframe:
 
 ```{r}
 df<-read.csv("train.csv",na.strings = "")
 ```
 
-###Turn Survived and Pclass into factor:
+### Turn Survived and Pclass into factor:
 
 ```{r}
 df$Survived<- as.factor(df$Survived)
 df$Pclass<- as.factor(df$Pclass)
 ```
 
-###Delete the passengerId, Ticket and name columns from the data frame and fill missing values of age with mean.
+### Delete the passengerId, Ticket and name columns from the data frame and fill missing values of age with mean.
 
 ```{r}
 df <- subset(df,select = -c(PassengerId,Ticket,Name))
 df[is.na(df[,"Age"]),"Age"]<-mean(df[,"Age"],na.rm = TRUE)
 ```
 
-###We used the GBM algorithm, and plotted the model. 
+### We used the GBM algorithm, and plotted the model. 
 Ploting the model presents all compared configurations with regard to the defined metric.
 
 ```{r}
@@ -49,42 +49,41 @@ fit.gbm <- train(Survived~., data=df, method="gbm", metric=metric, trControl=con
 plot(fit.gbm)
 ```
 
-###Load the test dataframe:
+### Load the test dataframe:
 
 ```{r}
 new_df <-read.csv('test.csv',na.strings = "")
 ```
 
-###Save the passengerIds:
+### Save the passengerIds:
 
 ```{r}
 ids<- new_df$PassengerId
 ```
 
-###Turn Survived to a factor and delete the same columns we deleted in the train set:
+### Turn Survived to a factor and delete the same columns we deleted in the train set:
 
 ```{r}
 new_df$Pclass<- as.factor(new_df$Pclass)
 new_df <- subset(new_df,select = -c(PassengerId,Ticket,Name))
 ```
 
-###After we ran our model, the test data contains some new levels in the *Cabin* feature that did not appear in the train data so we have to add the new levels to the dataframe levels:
+### After we ran our model, the test data contains some new levels in the *Cabin* feature that did not appear in the train data so we have to add the new levels to the dataframe levels:
 
 ```{r}
 fit.gbm$xlevels[["Cabin"]] <- union(fit.gbm$xlevels[["Cabin"]], levels(new_df$Cabin))
 ```
 
-###Predict the rows in the test set with the GBM model:
+### Predict the rows in the test set with the GBM model:
 
 ```{r}
 new_pred<- predict(fit.gbm,new_df,na.action = na.pass)
 ```
 
-###Write the predictions into file:
+### Write the predictions into file:
+
 ```{r}
 res <- cbind(PassengerId=ids,Survived=as.character(new_pred))
 write.csv(res,file="GBM results.csv",row.names = F)
 
 ```
-
-##We found out that the best accuracy is when we fill the missing values of age with the mean of the column (instead of omitting) and cross validation of 3.
