@@ -12,7 +12,8 @@ output: html_document
 library(caretEnsemble)
 #install.packages("caret")
 library(caret)
-
+#install.packages("randomForest")
+library(randomForest)
 ```
 
 ### Read dataframe:
