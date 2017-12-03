@@ -1,0 +1,88 @@
+# Final Report - Titanic: Machine Learning from Disaster
+
+Name | ID
+-------|--------
+Carmela Davidovsky | 308548031
+Dar Nettler | 203024724
+
+## Our best score:
+Our submission username is cardav and our best score in the leader board is 3150, with GBM
+![in the leader board](https://github.com/carmelad912/ex2/blob/master/Algorithms/GBM/GBM%20score.PNG)
+
+## Visualization of the behavior of each feature vs. the target feature (surviving or not).
+We now tide the data two times: the first is for categorial data and the second for numeric data.
+The first plot describes only categorical features (factors):
+![for categorial](https://github.com/carmelad912/ex2/blob/master/categorialFeatures.PNG)
+
+and the second plot describes only numeric features:
+![for numeric](https://github.com/carmelad912/ex2/blob/master/NumericFeatures.PNG)
+
+## NaiveBayes
+[The code for the algorithm](https://github.com/carmelad912/ex2/blob/master/Algorithms/NaiveBayes/Naive%20Bayes%20classifier.Rmd)
+
+### Pre-Processing:
+We read the dataframe and turned the *survived* and *pclass* features into factor.
+Delete the passengerID, Ticket and Name columns: these columns are uniqe for each passenger
+and if we would use them it can mess the classification model.
+We sepereted the train set into train and test. The best accuracy we got is when we omit the missing values and divide the train set into 87% of train and 13% of test.
+
+### NaiveBayes
+Every feature being classified is independent of the value of any other feature.
+We train the model according naive bayes (use the 87% train test), and check the accuracy
+of the model on the test set.
+
+![Accuracy of the model](https://github.com/carmelad912/ex2/blob/master/Algorithms/NaiveBayes/Accuracy.PNG)
+
+After all that we predict the given test set. and you can find the results [here](https://github.com/carmelad912/ex2/blob/master/Algorithms/NaiveBayes/NaiveBayes%20results.csv)
+
+### Result in Kaggle
+![score in kaggle](https://github.com/carmelad912/ex2/blob/master/Algorithms/NaiveBayes/NaiveBayes%20score.PNG)
+
+
+## GBM with Caret
+[The code for the algorithm](https://github.com/carmelad912/ex2/blob/master/Algorithms/GBM/GBM.Rmd)
+
+### Pre-Processing:
+We read the dataframe and turned the *survived* and *pclass* features into factor.
+Delete the passengerID, Ticket and Name columns: these columns are uniqe for each passenger
+and if we would use them it can mess the classification model.
+We decided to fill the missing values in the column of *age* with the mean of the column.
+We got the best accuracy on cross validation, while k=3.
+
+### GBM with caret
+GBM (Gradient Boosting Machine) builds the model in a stage-wise fashion like other boosting methods do, 
+and it generalizes them by allowing optimization of an arbitrary differentiable loss function (from wikipedia).
+We trained model of GBM and used cross validation, when k=3.
+
+![plot of the model](https://github.com/carmelad912/ex2/blob/master/Algorithms/GBM/GBM%20model%20plot.PNG)
+
+After all that we predict the given test set. and you can find the results [here](https://github.com/carmelad912/ex2/blob/master/Algorithms/GBM/GBM%20results.csv)
+
+### Result in Kaggle
+We got our best result with this algorithm!
+![score in kaggle](https://github.com/carmelad912/ex2/blob/master/Algorithms/GBM/GBM%20score.PNG)
+
+
+## Ensemble: GBM and rpart
+[The code for the algorithm](https://github.com/carmelad912/ex2/blob/master/Algorithms/Ensemble/Ensemble.Rmd)
+
+### Pre-Processing:
+We read the dataframe and turned the *survived* and *pclass* features into factor.
+Delete the passengerID, Ticket, Cabin and Name columns: these columns are uniqe for each passenger
+and if we would use them it can mess the classification model.
+We decided to fill the missing values in the column of *age* with the mean of the column,
+and after checking the most common level in *Embarked*, we filled the missing values in *embarked* with the level *S*.
+
+### Ensemble: GBM and rpart
+We use ensemble to train number of models and decide for each row what is the best classification.
+After a lot of correlation checking we found out that for us the best outcome will be for ensembling GBM and rpart - 
+Recursive Partitioning and Regression Trees. We used cross validation, while k=10
+
+![correlation between the models](https://github.com/carmelad912/ex2/blob/master/Algorithms/Ensemble/correlation%20between%20models.PNG)
+![dot plot of the model](https://github.com/carmelad912/ex2/blob/master/Algorithms/Ensemble/dot%20plot%20ensemble.PNG)
+![scatter plot of the model](https://github.com/carmelad912/ex2/blob/master/Algorithms/Ensemble/scatter%20plot%20ensemble.PNG)
+
+After all that we predict the given test set. and you can find the results [here](https://github.com/carmelad912/ex2/blob/master/Algorithms/Ensemble/Ensemble%20results.csv)
+
+### Result in Kaggle
+![score in kaggle](https://github.com/carmelad912/ex2/blob/master/Algorithms/Ensemble/Ensemble%20score.PNG)
