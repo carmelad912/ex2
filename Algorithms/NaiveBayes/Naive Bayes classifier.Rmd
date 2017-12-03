@@ -30,7 +30,7 @@ df$Survived<- as.factor(df$Survived)
 df$Pclass<- as.factor(df$Pclass)
 ```
 
-### Delete the passengerId, Ticket and name columns from the data frame and fill missing values of age with mean:
+### Delete the passengerId, Ticket and name columns from the data frame:
 
 ```{r}
 df <- subset(df,select = -c(PassengerId,Ticket,Name))
