@@ -1,9 +1,6 @@
 # Final Report - Titanic: Machine Learning from Disaster
 
-Name | ID
--------|--------
-Carmela Davidovsky | 308548031
-Dar Nettler | 203024724
+### Carmela Davidovsky & Dar nettler
 
 ## Our best score:
 Our submission username is cardav and our best score in the leader board is 3150, with GBM
